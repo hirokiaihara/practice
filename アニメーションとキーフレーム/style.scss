@@ -1,0 +1,84 @@
+$cBlack: Black;
+
+body {
+  text-align: center;
+}
+
+.three-dot-spinner {
+  text-align: center;
+
+  & div {
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    background-color: $cBlack;
+    border-radius: 50%;
+    animation: sk-bouncedelay 1.4s infinite;
+  }
+
+  & .bounce1 {
+    animation-delay: -0.32s;
+  }
+  & .bounce2 {
+    animation-delay: -0.16s;
+  }
+}
+
+@keyframes sk-bouncedelay {
+  0% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+  }
+  80% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+
+@mixin animation(
+  $name,
+  $duration: 1s,
+  $timing-function: ease,
+  $delay: 0s,
+  $iteration-count: infinite,
+  $direction: normal,
+  $fill-mode: forwards
+) {
+  animation: {
+    name: $name;
+    duration: $duration;
+    timing-function: $timing-function;
+    delay: $delay;
+    iteration-count: $iteration-count;
+    direction: $direction;
+    fill-mode: $fill-mode;
+  }
+}
+
+.rect {
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  background-color: $cBlack;
+  @include animation(
+    $name: sk-bouncedelay_02
+  );
+}
+.paused {
+  animation-play-state: paused;
+}
+@keyframes sk-bouncedelay_02 {
+  0%, 50% {
+    transform: scale(0);
+    background-color: $cBlack;
+  }
+  
+  100% {
+    transform: scale(1);
+    background-color: green;
+  }
+}
