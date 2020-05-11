@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>JavaScript, イベントリスナー</h1>
+  <button id="btn">Change Title Color</button>
+  <script src="main.js"></script>
+  <!-- DOMContentloaded, loadを記述することによって、scriptから読んでもエラーが出なくなる -->
+  <h1 id="main-title">DOMContentLoaded vs load</h1>
+  <strong class="dcl">DOMContentLoaded</strong>
+  <strong class="load">load</strong>
+  <img src="https://images.unsplash.com/photo-1485470733090-0aae1788d5af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format" alt="" width="300" />
+  <img src="https://images.unsplash.com/photo-1549880338-65ddcdfd017b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format" alt="" width="300" />
+  <a style="position: fixed; bottom:0; left: 0;" href="https://codepen.io/LukeAskew/pen/LnJsE" target="_blank">@LukeAskew</a>
+
+  <!-- 文字列をDOMで分割する -->
+  <div id="container">
+    <div class="animate-title">
+      PLAY ANIMATION
+    </div>
+    <div class="animate-title_02">
+      STRING ANIMATION
+    </div>
+    <button onclick="document.querySelector('.animate-title').classList.toggle('inview');">Animation</button>
+  </div>
+
+</body>
+</html>
