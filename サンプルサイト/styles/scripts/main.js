@@ -16,7 +16,7 @@ class Main {
   }
 
   get observers() {
-    return this._obsertvers;
+    return this._observers;
   }
 
   _init() {
