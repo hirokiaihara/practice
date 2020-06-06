@@ -345,4 +345,98 @@
 #   puts "今日は#{days[day]}"
 # end
 
+# unless文
+# a = 3
+# b = 2
+# unless a + b <= 0
+#   puts "計算結果は0より大きいです"
+# end 
+
+# fruits_price = [["apple", [200, 250, 220]], ["orange", [100, 120, 80]], ["melon", [1200, 1500, ]]]
+# fruits_price.each do |key, values|
+#   sum_price = 0
+#   values.each do |price|
+#     sum_price += price
+#   end
+  
+#   puts "#{key}の合計金額は#{sum_price}円です"
+# end
+
+# fruits_price = [["apple", [200, 250, 220]], ["orange", [100, 120, 80]], ["melon", [1200, 1500, ]]]
+# fruits_price.each do |fruit|
+#   sum = 0
+#   fruit[1].each do |price|
+#     sum += price
+#   end
+
+#   puts "#{fruit[0]}の合計金額は#{sum}円です"
+# end
+
+# aが100以上の時は処理が終了するコード
+# a = 0
+# while a < 100 do
+#   puts a
+#   a += 1
+# end
+# a = 0
+# while true do
+#   puts a
+#   a += 1
+#   break if a >= 100
+# end
+
+# 文字列を数字に変換するメソッド to_i
+# str = "1"
+# puts str.to_i
+
+# array = ["dog", "cat", "something"]
+# array.pop
+# puts array
+
+# attr_readerメソッド
+# class Book
+#   attr_reader :title, :price
+
+#   def initialize(title, price)
+#     @title = title
+#     @price = price
+#   end
+# end
+
+# book = Book.new('プロを目指すためのRuby入門', '3000')
+# puts book.title 
+
+# input = [3, 5, 9, 12, 15, 21, 29, 35, 42, 51, 62, 78, 81, 87, 92, 93]
+
+# def search(target_num, input)
+#   input.each_with_index do |num, index|
+#     if num == target_num
+#       puts "その数字は#{index+1}番目にあります"
+#       return
+#     end
+#   end
+#   puts "その数は含まれません"
+# end
+
+# search(62, input)
+
+# 三項演算子
+# 条件式 ? 真の時の値 : 偽の時の値
+# 条件式を判定し、trueだった時は 「真の時の値」を、falseだった時は「偽の時の値」を返す。条件や帰りちがシンプルな場合、if文よりも簡潔に記述できる。
+# var = 12345
+
+# if var.class == String
+#   m = "varはStringです"
+# else
+#   m = "varはStringではありません"
+# end
+
+# puts m
+# # 書き換え
+# var.class == String ? m = "varはStringです" : m = "varはStringではありません"
+# puts m
+
+
+
+
 
