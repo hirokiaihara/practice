@@ -436,7 +436,155 @@
 # var.class == String ? m = "varはStringです" : m = "varはStringではありません"
 # puts m
 
+# ワンライナー
+# user_data = [
+#   {
+#     user: {
+#       profile: {
+#         name: 'George'
+#       }
+#     }
+#   },
+#   {
+#     user: {
+#       profile: {
+#         name: 'Alice'
+#       }
+#     }
+#   },
+#   {
+#     user: {
+#       profile: {
+#         name: 'Taro'
+#       }
+#     }
+#   }
+# ]
 
+# user_data.each do |u|
+#   puts u[:user][:profile][:name]
+# end
+
+# user_data.each{ |u| puts u.dig(:user, :profile, :name) }
+
+# namespaceを使用したルーティング
+# namespace :admin do
+#   namespace :users do
+#     resources :tweets, only[:index]
+#   end
+# end
+# 上記のルーティングで生成されるURL
+# /admin/users/tweets
+
+# 引数のヴァリエーション
+# array = [1, 2, 3, 4, 5].map do |el|
+#   if el.odd?
+#     el
+#   end
+# end.compact!
+
+# puts array
+
+# map {||...} 各要素に対してブロックを評価した結果をあうべて含む配列を返します。
+# ブロックを省略した場合、上で説明した繰り返しを実行し、その結果として得られる配列を返すようなEnumeratorオブジェクトを返します。
+# odd?  自身が奇数であれば真を返し、そうでない場合は偽を返す。
+# compact! 自身からnilを取り除いた配列を生成して返す。
+
+# array = [1, 2, 3, 4, 5].map { |el| el if el.odd? }.compact!
+# puts array
+# array = (1..5).to_a.delete_if { |el| el.even? }
+# puts array
+
+# # to_a selfを返す
+# # even 自身が偶数であれば真を返し、そうでない場合は偽を返す。
+
+# array = (1..5).to_a.delete_if(&:even?)
+# puts array
+# array =[1, 2, 3, 4, 5].select{ |el| el.odd? }
+# puts array
+
+# fizzbuzz応用
+# def fizzbuzz(max_num)
+
+#   (1..max_num).each do |num|
+#     if num % 15 == 0
+#       puts "FizzBuzz"
+#     elsif num % 5 == 0
+#       puts "Buzz"
+#     elsif num % 3 == 0
+#       puts "Fizz"
+#     else
+#       puts num
+#     end
+#   end
+# end
+
+# puts 'いくつまで数えますか？'
+# num = gets.to_i
+# fizzbuzz(num)
+
+# Rails ビューの基本概念
+# Railsにはアセットパイプラインという仕組みが用意されており、複数のCSSやJavaScriptファイルは一つにまとめて圧縮される。この機能はSprocketsというGemがになっている。
+# 各ビューが読み込まれる際、必ずapplication.html.erbが読み込まれる。その中にstylesheet_link_tagの記述があり、それによって
+# app/assets/stylesheets/application.cssが呼び出される。
+# application.cssはマニフェストファイルと言われ、このファイルから各CSSファイルを呼び出す仕組みになっている。
+# JavaScriptも同様。
+
+# 上記を踏まえると、作成したcssやJavaScriptのファイルはどこに配置すれば良いか
+# css app/asshets/stylesheetsのフォルダ内
+# JavaScript app/asshets/JavaScriptsのフォルダ内
+
+# シーザー暗号を出力するコードの作成
+# ord 文字列の最初の文字の文字コードを整数で返す。
+# chr selfを文字コードと見た時、それに対応する一文字からなる文字列を返します。
+# join 連結 引数がある場合はその引数を用いて連結する。
+
+# char = "frqjudwxodwlrq"
+# char_ary = char.split("")
+# changed_char_ary = []
+
+# char_ary.each do |char|
+#   changed_char_ary << (char.ord - 3).chr
+# end
+
+# puts changed_char_ary.join
+
+# 動的なクラス名の定義
+# class クラス名 end という記述を用いないでTweetというクラスを定義する
+# var = 'hogehoge'
+# Tweet = class.new do
+#   ブロックの内部で各種メソッドを定義(varを呼び出すことができる)
+# end
+# # メリット1 ブロックの外の変数が呼び出せる
+# class Product
+#   def self.create_new_class(class_name)
+#     # メリット2 引数の値に応じて、クラスを作成する
+#     self.class.const_set :'#{class_name}', Class.new
+#   end
+# end
+
+# モデルへのメソッド記載
+# ユーザーが入力した値に対して自動で消費税額8%を加算してからデータベースに保存
+# class Product < ApplicationRecord
+#   def add_tax
+#     self.price = (price * 1.08).round
+#   end
+# end
+# class productsController < ApplicationController
+#   def create
+#   @product = Product.new(product_params)
+#   @procuct.add_tax
+
+#   respond_to do |format|
+#     if @product.save
+#       format.html {redirect_to @product, notice: 'Product was successfully created.' }
+#       format.json {render :show, status: :created, location: @product }
+#     else
+#       format.html {render :new}
+#       format.json {render json: @product.errors, status: :unprocessable_entity }
+#     end
+#   end
+# end
 
 
 
