@@ -586,5 +586,35 @@
 #   end
 # end
 
+# renderの記載について
+# [A]
+# @users = User.all
+# @users.each do |user|
+#   = render 'user', user: user
+
+# [B]
+# @users = User.all
+#   = render 'user', users: @users
+
+# [B]の方が好まれる。
+# [B]の方が処理が早いため。
+# [A]では、@usersにeachを利用して、user一人一人に対してrenderを実行。
+# この書き方だと、userが100人いると100回、50000人いると50000回、どの部分テンプレートを利用するのか探しにいく処理が実行されるため、ユーザーが多くなれば多くなるほどパフォーマンスが低下していく。
+# 一方、[B]では、renderする際の変数に@usersを渡しています。この書き方だと、どのテンプレートを利用するのか探しにいく処理は一度しか実行されないため、[A]より高速にビューを描画することができます。
+# なお、render @users と省略することも可能です。
+
+# resourcesとresourceの差異について
+# ・idつきのパスが生成されない。show, editアクションの実行に、idがが必要ない場合に有効。
+# ・indexアクション用のルーティングが生成されない。
+# （例）
+# resource :users
+# 生成されるルーティング
+# new_users GET      /users/new(.:format)    users#new
+# edit_users GET     /users/edit(.:format)    users#edit
+#      users GET     /users(.:format)        users#show
+#            PATCH   /users(.:format)        users#update
+#            PUT     /users(.:format)        users#update
+#            DELETE  /users(.:format)        users#destroy
+#            POST    /users(.:format)        users#create
 
 
