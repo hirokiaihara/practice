@@ -617,4 +617,229 @@
 #            DELETE  /users(.:format)        users#destroy
 #            POST    /users(.:format)        users#create
 
+# deviseの設定について
+# class ApplicationController < ActionController::Base
+#   before_action :configure_permitted_parameters, if: :devise_controller?
 
+#   def configure_permitted_parameters
+#     devise_parameter_sanitizer.permit(:sign_up, keys: [:nickname, :avator])
+#   end
+# end
+
+# ApplicationControllerを継承しているコントローラー内の全てのアクションが実行される前に、before_actionが実行される。
+# もしそれがdeviseのコントローラーだったら(devise_controller?というメソッドの返り値がtrueだったら)configure_permited_parameteraを呼ぶ。
+# configure_permitted_parametersの中で、
+# devise_parameter_sanitizerが実行されるが、これはストロングパラメーターのdevise版。サインアップ時に、nicknameとavatarカラムへの保存を許可する。
+# deviseのコントローラーは、デフォルトではアプリケーション内に作成されません。
+# deviseコントローラーはApplicationControllerを継承している。
+
+# ヘルパーメソッドについて
+# module ProductsHelper
+#   def converting_to_jpy(price)
+#     "#{price.to_s(:delimited, delimiter: ',' )}円"
+#   end
+# end
+
+# <h1>Products</h1>
+
+# <table>
+#   <thead>
+#     <tr>
+#       <th>Name</th>
+#       <th>Price</th>
+#       <th colspan="3"></th>
+#     </tr>
+#   </thead>
+
+#   <tbody>
+#     <% @products.each do |procuct| %>
+#       <tr>
+#         <td><%= product.name %></td>
+#         <td><%= converting_to_jpy(product.price) %></td>
+#         <td><%= link_to 'Show', product %></td>
+#         <td><%= link_to 'Edit', edit_product_path(product) %></td>
+#         <td><%= link_to 'Delete', product, method: :delete, data: {confirm: 'Are you sure?'} %></td>
+#       </tr>
+#     <% end %>
+#   </tbody>
+# </table>
+
+# <br>
+
+# <%= link_to 'New Product', new_product_path %>
+
+# namespaceの利用
+# products_controller.rb
+
+# class Admin::ProductsController < ApplicationController
+#   def index
+#   end
+# end
+
+# routes.rb
+
+# namespace :admin do
+#   resourses :products, only: :index
+# end
+
+# Rakeタスクについて
+# Railsで、定期的に実行したい処理は、lib/tasks以下のディレクトリに、rakeタスクを作成して処理を記述することが多いです。
+# 次のコードは、全てのユーザーに対して、ユーザーが入店したかどうかを管理する"enterd_flagというカラムをfalseにするrakeタスクです。
+# namespace :user do
+#   desc "ユーザーの入店情報をリセットする"
+#   task reset_enterd_flag: :envoronment do
+#     User.update_all(entere_flag: false)
+#   end
+# end
+# 上記のコードを実行するには
+# rake user:reset_entered_flag
+# rake[namespaceの名前]:[taskの名前]のように記述して実行する
+# 特定の周期でrakeタスクを自動実行したい場合は、wheneverというgemを組み合わせて利用します。
+
+# layouts下のビューファイル呼び出しについて
+# items_controller.rb
+# class ItemsController < ApplicationController
+#   layout 'hogehoge'
+
+#   def index
+#     @items = Item.includes(items_users: :users)
+#   end
+# end
+
+# layoutメソッド
+# コントローラーによってヘッダー・フッターのデザインを変更したり、読み込むCSSを切り替えるメソッド。
+#  「layout 'hogehoge'」があることで、itemsコントローラのアクションが呼び出された際の、レイアウトファイルとして
+#  app/views/layouts/hogehoge.htmlが使用される。何も指定しない場合は、
+#  app/views/layouts/application.htmlが読み込まれる。
+
+# belongs_toメソッドとrespond_toブロックについて
+# class Article < ActiveRecord::Base
+#   belongs_to :user, dapendent: :destroy
+# end
+
+# belongs_toはメソッドであり、:userが第一引数、dependent: :destroyが第二引数になっている。
+# 第二引数の記述はハッシュの{}を省略した形で、{dependent: :destroy}を意味している。
+
+# tweets_controller.rb
+# def index
+#   @tweets = Tweet.all
+
+#   respond_to do
+#     format.html index.html.erb
+#     format.json { render json: @tweets }
+#     format.xml  { render xml: @tweets }
+#     format.yaml { render text: @tweets.to_yaml }
+#   end
+# end
+
+# 送られてきたリクエストのよって、レスポンスを振り分けている。
+# 例えば、/tweets.jsonというURLでページを開いた場合、json形式で変数@tweetsの中身は展開される
+
+# コントローラーにおけるインスタンス変数の必要性と、paramsの解説
+# class ArticleController < ApplicationController
+#   def show
+#     @article = Article.find(params[:id])
+#   end
+# end
+# rails routesによりルーティングを確認すると、通常のshowアクションは以下のような設定がされている。
+# Prefix Verb   URI Pattern
+# tweet  GET    /tweets/:id(.:format)
+# そのため、例えば「localhost:3000/tweets/3」というURLが指定されると、paramsの「:id」というキーのヴァリューとして3が代入される。
+# そのため、その後呼び出されたコントローラー内でparams[:id]として取り出すことができる。
+
+# アソシエーションにおけるclass_nameの定義
+
+# class Event < ActiveRecord::Base
+#   belongs_to :owner, class_name: 'User'
+#   has_many :tickets
+
+#   validates :name, length: { maximum: 50 }, presence: true
+#   validates :place, length: { maximum: 100 }, presence: true
+#   validates :content, length: { maximum: 2000 }, presence: true
+#   validates :start_time, presence: true
+#   validates :end_time, presence: true
+#   validate :start_time_should_be_before_end_time
+
+#   def created_by?(user)
+#     return false unless user
+#     owner_id == user.id
+#   end
+
+#   private
+
+#   def start_time_should_be_before_end_time
+#     return nuless start_time && end_time
+
+#     if start_time >= end_time
+#       errors.add(:start_time, 'は終了時間よりも前に設定してください')
+#     end
+#   end
+# end
+
+# 以下の手順でGitHubへのpushを行った場合、発生する問題
+# 1.rails new を行い新規アプリケーション立ち上げ。
+# 2.開発を少し進めて一度全てのファイルをGitHubにpush。
+# 3.config/sectets.ymlにAWS S3のアクセスキーを記述。
+# 4.gitでpushされるのを防ごうと考え、.gitignoreの中に、secrets.ymlを追加した。
+# 5.変更があった全てのファイルをpushした。
+
+# 一度コミットしたファイルはその後、.gitingnoreに追加したとしてもGitの管理下から外されず、pushされてしまう。
+# ターミナルでgit rm --cached secrets.ymlを実行しGitで管理されないようにする。
+# secrets.ymlには直接キーを記述せず、環境変数を参照するようにする。
+
+# Rubyの:(コロン)で始まるシンボルの説明
+# Rubyの内部では整数として管理されているが、文字列のように呼び出せるオブジェクト。
+# 同じシンボルであれば同一のオブジェクトを参照するので、いくつ作成しても必要なメモリ容量は変わらない。
+# また、文字列よりも高速の処理する事ができる。
+
+# 以下のコードで、保存されずにロールバックされる場合のデバック
+# tweet = Tweet.new(tweet_params)
+# if tweet.save
+#   some_method(tweet)
+# end
+
+# 1.一行目の下にbinding.pryを記載し止める。
+# 2.pryの中で、tweet.saveを実行する。
+# 3.tweet.errorsを実行すると保存の際にでたエラーの内容が表示される。
+
+# Rails コールバック
+# ユーザーが投稿を行ったら、textカラムに保存されるデータの最後に「!!」を自動で追加するメソッド
+
+# tweet.rb
+# class Tweet < ApplicationRecord
+#   before_action :change_tweet
+
+#   def change_tweet
+#     self.text = text + "!!"
+#   end
+# end
+
+# ボッチ演算子
+# 以下のようなDeviseのコードがあります。
+# @nickname = current_user.nickname
+# ただし、ログインしていないときにこれを実行するとnilに対してメソッドを実行しようとしてエラーになってしまいます。
+# これを回避するための記述。
+# @nickname = current_user&.nickname
+# &はsafe navigation operator, lonely operatorなどと呼ばれる演算子です。
+# メソッドに続けて記述すると、そのメソッドがnil出なかった場合のみ右辺のメソッドが実行される。
+# もしnilだった場合は全ての演算結果としてnilを返します。つまり@nicknameにnilが代入されます。
+
+# Rails マイグレートに関して
+# 1.存在しているマイグレーションファイルの状態を確認するコマンド
+# bundle exec rake db:migrate:status
+# 2.修正方法
+# bundle exec rake db:rollbackでマイグレーションファイルを差し戻してから修正。
+# 再びマイグレート。
+# or
+# rails g migrationで新たなマイグレーションファイルを作成
+# 修正箇所を正しく変更するためのマイグレーションファイルを作成する。
+
+# Railsアプリケーションではapplication.cssにて*=require_tree.という記述によりCSSファイルを読み込む。
+# scssを使用する際は、拡張子をscssに変更した上で、@importでファイルを読み込みます。
+# この時のrequireと@importの違い
+# requireはRailsのアセットパイプラインを仕組みを使ってファイルをインポートする。
+# アセットパイプラインは、CSSファイルやJavaScriptファイルを一つにまとめて、圧縮する事で処理速度を早くするための仕組み。
+# sprockesというgemがこの機能をになっている。
+# それに対して@importはscssが用意しているメソッド。そのため、
+# application.scssと拡張子を変更しないと使えない。
+# application.scssからscssファイルをインポートするために使用する。
